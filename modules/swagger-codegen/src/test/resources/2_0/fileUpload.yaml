@@ -1,0 +1,14 @@
+swagger: '2.0'
+info: { version: 0.1.0, title: Multipart Upload }
+paths:
+  /:
+    post:
+      operationId: upload
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: file
+          in: formData
+          required: true
+          type: file
+      responses: { '200': { description: Successful upload } }

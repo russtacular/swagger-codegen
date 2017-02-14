@@ -41,7 +41,7 @@ export interface {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{
      * {{{description}}}
      */
 {{/description}}
-    "{{name}}"{{^required}}?{{/required}}: {{#isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}{{{datatype}}}{{/isEnum}};
+    "{{baseName}}"{{^required}}?{{/required}}: {{#isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}{{{datatype}}}{{/isEnum}};
 {{/vars}}
 }
 
@@ -93,12 +93,17 @@ export const {{classname}}FetchParamCreator = {
 
         let contentTypeHeader: Dictionary<string> = {};
 {{#hasFormParams}}
+    {{#formParams}}{{#isFile}}
+        const formData = new FormData();
+        formData.append("file", params.file);
+        fetchOptions.body = formData;
+    {{/isFile}}
+    {{^isFile}}
         contentTypeHeader = { "Content-Type": "application/x-www-form-urlencoded" };
         fetchOptions.body = querystring.stringify({
-        {{#formParams}}
             "{{baseName}}": params["{{paramName}}"],
-        {{/formParams}}
         });
+    {{/isFile}}{{/formParams}}
 {{/hasFormParams}}
 {{#hasBodyParam}}
         contentTypeHeader = { "Content-Type": "application/json" };{{#bodyParam}}
