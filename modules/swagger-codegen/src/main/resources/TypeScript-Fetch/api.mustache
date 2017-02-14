@@ -93,17 +93,17 @@ export const {{classname}}FetchParamCreator = {
 
         let contentTypeHeader: Dictionary<string> = {};
 {{#hasFormParams}}
-    {{#formParams}}{{#isFile}}
+{{#formParams}}{{#isFile}}
         const formData = new FormData();
         formData.append("file", params.file);
         fetchOptions.body = formData;
-    {{/isFile}}
-    {{^isFile}}
+{{/isFile}}
+{{^isFile}}
         contentTypeHeader = { "Content-Type": "application/x-www-form-urlencoded" };
         fetchOptions.body = querystring.stringify({
             "{{baseName}}": params["{{paramName}}"],
         });
-    {{/isFile}}{{/formParams}}
+{{/isFile}}{{/formParams}}
 {{/hasFormParams}}
 {{#hasBodyParam}}
         contentTypeHeader = { "Content-Type": "application/json" };{{#bodyParam}}
