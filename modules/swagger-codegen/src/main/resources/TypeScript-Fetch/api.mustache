@@ -93,17 +93,26 @@ export const {{classname}}FetchParamCreator = {
 
         let contentTypeHeader: Dictionary<string> = {};
 {{#hasFormParams}}
+        let formData: Dictionary<any> = {};
+        let isMultipartData = false;
 {{#formParams}}{{#isFile}}
-        const formData = new FormData();
-        formData.append("file", params.file);
-        fetchOptions.body = formData;
+        isMultipartData = true;
 {{/isFile}}
-{{^isFile}}
-        contentTypeHeader = { "Content-Type": "application/x-www-form-urlencoded" };
-        fetchOptions.body = querystring.stringify({
-            "{{baseName}}": params["{{paramName}}"],
-        });
-{{/isFile}}{{/formParams}}
+        formData["{{baseName}}"] = params["{{paramName}}"];
+{{/formParams}}
+
+        if(isMultipartData) {
+            let body = new FormData();
+            for(let key in formData) {
+                body.append(key, formData[key]);
+            }
+            fetchOptions.body = body;
+            contentTypeHeader = { "Content-Type": "multipart/form-data" };
+        }
+        else {
+            fetchOptions.body = querystring.stringify(formData);
+            contentTypeHeader = { "Content-Type": "application/x-www-form-urlencoded" };
+        }
 {{/hasFormParams}}
 {{#hasBodyParam}}
         contentTypeHeader = { "Content-Type": "application/json" };{{#bodyParam}}
