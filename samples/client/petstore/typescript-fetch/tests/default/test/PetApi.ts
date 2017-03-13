@@ -36,6 +36,16 @@ describe('PetApi', () => {
         });
       });
 
+      it('should update Pet using url-encoded form', () => {
+        return api.updatePetWithForm({ petId: fixture.id.toString(), name: "Snoopy" }).then((result) => {
+          console.log(result);
+          debugger;
+          return expect(result).to.exist;
+        }, (err) => {
+          return expect(err).to.exist;
+        })
+      });
+
       it('should delete Pet', () => {
         return api.deletePet({ petId: fixture.id }, requestOptions);
       });
