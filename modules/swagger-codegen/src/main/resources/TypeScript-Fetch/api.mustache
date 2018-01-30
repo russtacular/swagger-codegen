@@ -165,7 +165,7 @@ export const {{classname}}Fp = {
      * @param {{paramName}} {{description}}{{/allParams}}
      */
     {{nickname}}({{#hasParams}}params: { {{#allParams}}"{{paramName}}"{{^required}}?{{/required}}: {{{dataType}}}; {{/allParams}} }, {{/hasParams}}options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}any{{/returnType}}> {
-        return (fetch, basePath) => this.{{nickname}}WithHttpInfo({{#hasParams}}params, {{/hasParams}}options)(fetch, basePath)
+        return (fetch?, basePath?) => this.{{nickname}}WithHttpInfo({{#hasParams}}params, {{/hasParams}}options)(fetch, basePath)
             .then((response: Response) => response{{#returnType}}.json(){{/returnType}})
             .catch((response: Response) => { throw response; });
     },
