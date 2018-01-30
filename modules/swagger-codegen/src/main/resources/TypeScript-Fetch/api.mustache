@@ -159,15 +159,14 @@ export const {{classname}}Fp = {
             });
         };
     },
-
     /** {{#summary}}
      * {{summary}}{{/summary}}{{#notes}}
      * {{notes}}{{/notes}}{{#allParams}}
      * @param {{paramName}} {{description}}{{/allParams}}
      */
     {{nickname}}({{#hasParams}}params: { {{#allParams}}"{{paramName}}"{{^required}}?{{/required}}: {{{dataType}}}; {{/allParams}} }, {{/hasParams}}options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}any{{/returnType}}> {
-        return {{nickname}}WithHttpInfo({{#hasParams}}params, {{/hasParams}}options)(fetch, basePath)
-            .then((response) => response{{#returnType}}.json(){{/returnType}};)
+        return (fetch, basePath) => this.{{nickname}}WithHttpInfo({{#hasParams}}params, {{/hasParams}}options)(fetch, basePath)
+            .then((response) => response{{#returnType}}.json(){{/returnType}})
             .catch((response) => { throw response; });
     },
 {{/operation}}
