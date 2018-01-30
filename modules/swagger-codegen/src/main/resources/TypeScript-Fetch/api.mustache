@@ -147,17 +147,28 @@ export const {{classname}}Fp = {
      * {{notes}}{{/notes}}{{#allParams}}
      * @param {{paramName}} {{description}}{{/allParams}}
      */
-    {{nickname}}({{#hasParams}}params: { {{#allParams}}"{{paramName}}"{{^required}}?{{/required}}: {{{dataType}}}; {{/allParams}} }, {{/hasParams}}options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}any{{/returnType}}> {
+    {{nickname}}WithHttpInfo({{#hasParams}}params: { {{#allParams}}"{{paramName}}"{{^required}}?{{/required}}: {{{dataType}}}; {{/allParams}} }, {{/hasParams}}options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
         const fetchArgs = {{classname}}FetchParamCreator.{{nickname}}({{#hasParams}}params, {{/hasParams}}options);
         return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
             return fetch(basePath + fetchArgs.url, fetchArgs.options).then((response) => {
                 if (response.status >= 200 && response.status < 300) {
-                    return response{{#returnType}}.json(){{/returnType}};
+                    return response;
                 } else {
                     throw response;
                 }
             });
         };
+    },
+
+    /** {{#summary}}
+     * {{summary}}{{/summary}}{{#notes}}
+     * {{notes}}{{/notes}}{{#allParams}}
+     * @param {{paramName}} {{description}}{{/allParams}}
+     */
+    {{nickname}}({{#hasParams}}params: { {{#allParams}}"{{paramName}}"{{^required}}?{{/required}}: {{{dataType}}}; {{/allParams}} }, {{/hasParams}}options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}any{{/returnType}}> {
+        return {{nickname}}WithHttpInfo({{#hasParams}}params, {{/hasParams}}options)(fetch, basePath)
+            .then((response) => response{{#returnType}}.json(){{/returnType}};)
+            .catch((response) => { throw response; });
     },
 {{/operation}}
 };
@@ -168,6 +179,15 @@ export const {{classname}}Fp = {
  */
 export class {{classname}} extends BaseAPI {
 {{#operation}}
+    /** {{#summary}}
+     * {{summary}}{{/summary}}{{#notes}}
+     * {{notes}}{{/notes}}{{#allParams}}
+     * @param {{paramName}} {{description}}{{/allParams}}
+     */
+    {{nickname}}WithHttpInfo({{#hasParams}}params: { {{#allParams}} "{{paramName}}"{{^required}}?{{/required}}: {{{dataType}}};{{/allParams}} }, {{/hasParams}}options?: any) {
+        return {{classname}}FpWithHttpInfo.{{nickname}}({{#hasParams}}params, {{/hasParams}}options)(this.fetch, this.basePath);
+    }
+
     /** {{#summary}}
      * {{summary}}{{/summary}}{{#notes}}
      * {{notes}}{{/notes}}{{#allParams}}
@@ -186,6 +206,15 @@ export class {{classname}} extends BaseAPI {
 export const {{classname}}Factory = function (fetch?: FetchAPI, basePath?: string) {
     return {
 {{#operation}}
+        /** {{#summary}}
+         * {{summary}}{{/summary}}{{#notes}}
+         * {{notes}}{{/notes}}{{#allParams}}
+         * @param {{paramName}} {{description}}{{/allParams}}
+         */
+        {{nickname}}WithHttpInfo({{#hasParams}}params: { {{#allParams}} "{{paramName}}"{{^required}}?{{/required}}: {{{dataType}}};{{/allParams}} }, {{/hasParams}}options?: any) {
+            return {{classname}}FpWithHttpInfo.{{nickname}}({{#hasParams}}params, {{/hasParams}}options)(fetch, basePath);
+        },
+
         /** {{#summary}}
          * {{summary}}{{/summary}}{{#notes}}
          * {{notes}}{{/notes}}{{#allParams}}
