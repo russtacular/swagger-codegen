@@ -166,8 +166,8 @@ export const {{classname}}Fp = {
      */
     {{nickname}}({{#hasParams}}params: { {{#allParams}}"{{paramName}}"{{^required}}?{{/required}}: {{{dataType}}}; {{/allParams}} }, {{/hasParams}}options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}any{{/returnType}}> {
         return (fetch, basePath) => this.{{nickname}}WithHttpInfo({{#hasParams}}params, {{/hasParams}}options)(fetch, basePath)
-            .then((response) => response{{#returnType}}.json(){{/returnType}})
-            .catch((response) => { throw response; });
+            .then((response: Response) => response{{#returnType}}.json(){{/returnType}})
+            .catch((response: Response) => { throw response; });
     },
 {{/operation}}
 };
@@ -184,7 +184,7 @@ export class {{classname}} extends BaseAPI {
      * @param {{paramName}} {{description}}{{/allParams}}
      */
     {{nickname}}WithHttpInfo({{#hasParams}}params: { {{#allParams}} "{{paramName}}"{{^required}}?{{/required}}: {{{dataType}}};{{/allParams}} }, {{/hasParams}}options?: any) {
-        return {{classname}}FpWithHttpInfo.{{nickname}}({{#hasParams}}params, {{/hasParams}}options)(this.fetch, this.basePath);
+        return {{classname}}Fp.{{nickname}}WithHttpInfo({{#hasParams}}params, {{/hasParams}}options)(this.fetch, this.basePath);
     }
 
     /** {{#summary}}
@@ -211,7 +211,7 @@ export const {{classname}}Factory = function (fetch?: FetchAPI, basePath?: strin
          * @param {{paramName}} {{description}}{{/allParams}}
          */
         {{nickname}}WithHttpInfo({{#hasParams}}params: { {{#allParams}} "{{paramName}}"{{^required}}?{{/required}}: {{{dataType}}};{{/allParams}} }, {{/hasParams}}options?: any) {
-            return {{classname}}FpWithHttpInfo.{{nickname}}({{#hasParams}}params, {{/hasParams}}options)(fetch, basePath);
+            return {{classname}}Fp.{{nickname}}WithHttpInfo({{#hasParams}}params, {{/hasParams}}options)(fetch, basePath);
         },
 
         /** {{#summary}}
